@@ -68,23 +68,22 @@ fun endpoint(url: String): String {
 
 
 class Request(stream: InputStream) {
-    var S = ""
+    val content = ctnt(stream)
 
-    init {
-        val bufferedReader = BufferedReader(
+    private fun ctnt(stream: InputStream): String {
+        val reader = BufferedReader(
                 InputStreamReader(stream)
         )
-        var line: String?
-        while (true) {
-            line = bufferedReader.readLine()
-            if (line == null) break
-            if (line == "") break
-            S += line
-        }
+        val lines = mutableListOf<String>()
+        do {
+            val line = reader.readLine()
+            lines.add(line)
+        } while (line != "")
+        return lines.joinToString()
     }
 
-    fun param(key: String): String = param(S, key)
-    fun endpoint(): String = endpoint(S)
+    fun param(key: String): String = param(content, key)
+    fun endpoint(): String = endpoint(content)
 }
 
 class TextPage(val msg: String, vararg val param: Param) : Response {

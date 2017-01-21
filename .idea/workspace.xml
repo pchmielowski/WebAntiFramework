@@ -19,10 +19,11 @@
       <file leaf-file-name="Main.kt" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/Main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="377">
-              <caret line="26" column="9" lean-forward="true" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
+            <state relative-caret-position="347">
+              <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
               <folding>
                 <element signature="e#14#155#0" expanded="true" />
+                <element signature="n#!!block;n#Request#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -548,18 +549,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Tests_(1) - 2017.01.21 at 11h 47m 35s.xml">
-      <configuration name="Tests (1)" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="Tests_(1) - 2017.01.21 at 11h 47m 58s.xml">
-      <configuration name="Tests (1)" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="Tests_(1) - 2017.01.21 at 14h 45m 16s.xml">
-      <configuration name="Tests (1)" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="Tests_(1) - 2017.01.21 at 14h 45m 39s.xml">
-      <configuration name="Tests (1)" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="Tests_(1) - 2017.01.21 at 14h 45m 57s.xml">
       <configuration name="Tests (1)" configurationId="JUnit" />
     </history-entry>
@@ -576,6 +565,18 @@
       <configuration name="Tests (1)" configurationId="JUnit" />
     </history-entry>
     <history-entry file="Tests_(1) - 2017.01.21 at 15h 38m 55s.xml">
+      <configuration name="Tests (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="Tests_(1) - 2017.01.21 at 22h 14m 33s.xml">
+      <configuration name="Tests (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="Tests_(1) - 2017.01.21 at 22h 15m 03s.xml">
+      <configuration name="Tests (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="Tests_(1) - 2017.01.21 at 22h 16m 39s.xml">
+      <configuration name="Tests (1)" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="Tests_(1) - 2017.01.21 at 22h 16m 57s.xml">
       <configuration name="Tests (1)" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -635,27 +636,31 @@
           <caret line="73" column="45" lean-forward="false" selection-start-line="73" selection-start-column="45" selection-end-line="73" selection-end-column="45" />
           <folding>
             <element signature="e#14#155#0" expanded="true" />
+            <element signature="n#!!block;n#Request#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Test.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="83" lean-forward="true" selection-start-line="13" selection-start-column="83" selection-end-line="13" selection-end-column="83" />
+        <state relative-caret-position="120">
+          <caret line="8" column="62" lean-forward="false" selection-start-line="8" selection-start-column="62" selection-end-line="8" selection-end-column="62" />
           <folding>
-            <marker date="1485006359088" expanded="true" signature="21:97" ph="..." />
-            <marker date="1485006359088" expanded="true" signature="137:463" ph="{...}" />
+            <marker date="1485033219796" expanded="true" signature="21:97" ph="..." />
+            <marker date="1485033219796" expanded="true" signature="111:569" ph="{...}" />
+            <marker date="1485033219796" expanded="true" signature="143:216" ph="{...}" />
+            <marker date="1485033219796" expanded="true" signature="241:567" ph="{...}" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="26" column="9" lean-forward="true" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
+        <state relative-caret-position="347">
+          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
           <folding>
             <element signature="e#14#155#0" expanded="true" />
+            <element signature="n#!!block;n#Request#0" expanded="false" />
           </folding>
         </state>
       </provider>

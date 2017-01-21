@@ -24,17 +24,31 @@ class Param(val name: String) {
     }
 }
 
-class EndPoint(location: String, val response: TextPage) {
+class EndPoint(val location: String, val response: TextPage) {
     fun page(): Response = response
+    fun isValid(actualLocation: String) = actualLocation == location
 }
 
 class Application(val endpoint: EndPoint) {
     fun start(port: Int) {
         val server = ServerSocket(port)
         while (true) {
+            println("loop")
             server.accept().use { socket ->
-                endpoint.page().send(socket)
+                function(socket)
             }
+        }
+    }
+
+    private fun function(socket: Socket) {
+        println("accepted")
+        val request = Request(socket.getInputStream())
+        if (endpoint.isValid(request.endpoint())) {
+            println(request.endpoint() + " is OK")
+            endpoint.page()
+                    .answer(request, socket)
+        } else {
+            println(request.endpoint() + " is not OK")
         }
     }
 }
@@ -44,6 +58,13 @@ fun param(url: String, name: String): String {
             .matchEntire(url)?.groups?.get(1)?.value ?: return ""
     return value
 }
+
+fun endpoint(url: String): String {
+    val value = ("GET\\s([^?]*)?.*").toRegex()
+            .matchEntire(url)?.groups?.get(1)?.value ?: return ""
+    return value
+}
+
 
 class Request(stream: InputStream) {
     var S = ""
@@ -62,11 +83,11 @@ class Request(stream: InputStream) {
     }
 
     fun param(key: String): String = param(S, key)
+    fun endpoint(): String = endpoint(S)
 }
 
 class TextPage(val msg: String, vararg val param: Param) : Response {
-    override fun send(socket: Socket) {
-        val request = Request(socket.getInputStream())
+    override fun answer(request: Request, socket: Socket) {
         socket.outputStream.write(
                 ("HTTP/1.1 200 OK\r\n\r\n" +
                         msg.format(
@@ -82,5 +103,6 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 }
 
 interface Response {
-    fun send(socket: Socket)
+
+    fun answer(request: Request, socket: Socket)
 }

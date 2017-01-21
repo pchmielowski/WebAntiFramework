@@ -9,12 +9,19 @@ import java.net.Socket
 fun main(args: Array<String>) {
     Application(
             EndPoint(
-                    location = "/",
+                    location = "/hello",
                     response = TextPage(
                             "Hello, %s %s!",
                             Param("name"),
                             Param("sur")
+                    )),
+            EndPoint(
+                    location = "/goodbye",
+                    response = TextPage(
+                            "Good bye! Be back on %s!",
+                            Param("back")
                     ))
+
     ).start(8080)
 }
 
@@ -29,11 +36,10 @@ class EndPoint(val location: String, val response: TextPage) {
     fun isValid(actualLocation: String) = actualLocation == location
 }
 
-class Application(val endpoint: EndPoint) {
+class Application(vararg val endpoints: EndPoint) {
     fun start(port: Int) {
         val server = ServerSocket(port)
         while (true) {
-            println("loop")
             server.accept().use { socket ->
                 function(socket)
             }
@@ -41,15 +47,10 @@ class Application(val endpoint: EndPoint) {
     }
 
     private fun function(socket: Socket) {
-        println("accepted")
         val request = Request(socket.getInputStream())
-        if (endpoint.isValid(request.endpoint())) {
-            println(request.endpoint() + " is OK")
-            endpoint.page()
-                    .answer(request, socket)
-        } else {
-            println(request.endpoint() + " is not OK")
-        }
+        for (e in endpoints)
+            if (e.isValid(request.endpoint()))
+                e.page().answer(request, socket)
     }
 }
 

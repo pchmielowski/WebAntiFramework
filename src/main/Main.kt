@@ -47,10 +47,10 @@ class Application(vararg val endpoints: EndPoint) {
     }
 
     private fun function(socket: Socket) {
-        val request = Request(socket.getInputStream())
-        for (e in endpoints)
-            if (e.isValid(request.endpoint()))
-                e.page().answer(request, socket)
+        val request = Request(socket.inputStream)
+        endpoints
+                .filter { it.isValid(request.endpoint()) }
+                .forEach { it.page().answer(request, socket) }
     }
 }
 

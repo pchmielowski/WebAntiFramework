@@ -78,11 +78,11 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 
 }
 
-class HtmlPage(val html: HtmlTag) : Response {
+class HtmlPage(val inner: HtmlTag) : Response {
   override fun answer(request: IRequest, socket: Socket) {
     socket.outputStream.write(
         ("HTTP/1.1 200 OK\r\n\r\n" +
-            html.src()).toByteArray())
+            "<html>" + inner.src() + "</html>").toByteArray())
   }
 
 }
@@ -118,9 +118,10 @@ class HtmlTag private constructor(
       params = params)
 
   constructor(tag: String, inner: HtmlTag) : this(tag, innerGenerator = { inner.src() })
-  constructor(tag: String, vararg inners: HtmlTag) : this(
+  constructor(tag: String, params: String = "", vararg inners: HtmlTag) : this(
       tag,
-      innerGenerator = { inners.map(HtmlTag::src).joinToString(separator = "") }
+      innerGenerator = { inners.map(HtmlTag::src).joinToString(separator = "") },
+      params = params
   )
 
   constructor(tag: String, f: () -> List<HtmlTag>) : this(

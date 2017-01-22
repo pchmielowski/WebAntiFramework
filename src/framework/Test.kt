@@ -20,21 +20,21 @@ class Tests {
   }
 
   @Test fun html() {
-    Assert.assertThat(HtmlTag("html").src(), `is`("<html></html>"))
-    Assert.assertThat(HtmlTag("body").src(), `is`("<body></body>"))
-    Assert.assertThat(HtmlTag("html", HtmlTag("body")).src(), `is`("<html><body></body></html>"))
+    Assert.assertThat(HtmlTag("inner").src(), `is`("<inner></inner>"))
+    Assert.assertThat(HtmlTag("inner").src(), `is`("<inner></inner>"))
+    Assert.assertThat(HtmlTag("inner", HtmlTag("inner")).src(), `is`("<inner><inner></inner></inner>"))
     Assert.assertThat(
-        HtmlTag("html",
-            HtmlTag("body",
+        HtmlTag("inner",
+            HtmlTag("inner",
                 HtmlTag("center", "Hello"))
         ).src(),
-        `is`("<html><body><center>Hello</center></body></html>"))
+        `is`("<inner><inner><center>Hello</center></inner></inner>"))
     Assert.assertThat(
-        HtmlTag("body",
+        HtmlTag("inner", "",
             HtmlTag("center", "Hello"),
             HtmlTag("left", "World")
         ).src(),
-        `is`("<body><center>Hello</center><left>World</left></body>"))
+        `is`("<inner><center>Hello</center><left>World</left></inner>"))
     Assert.assertThat(HtmlTag("a", "link", params = "href='url'").src(), `is`("<a href='url'>link</a>"))
   }
 
@@ -42,8 +42,8 @@ class Tests {
     Action(
         Param("user") to { p -> println(p) },
         HtmlPage(
-            HtmlTag("html",
-                HtmlTag("body",
+            HtmlTag("inner",
+                HtmlTag("inner", "",
                     HtmlTag("center", "OK"),
                     HtmlTag("a", "click")
                 ))

@@ -8,4 +8,4 @@ assert 'localhost:8080/hello?name=Piotrek&sur=chmielowski' 'Hello, Piotrek chmie
 
 assert 'localhost:8080/add?user=First' 'OK'
 assert 'localhost:8080/add?user=Second' 'OK'
-assert 'localhost:8080/list' '<html><body><ol><li>First</li><li>Second</li></ol></body></html>'
+assert 'localhost:8080/list' '<inner><inner><ol><li>First</li><li>Second</li></ol></inner></inner>'

@@ -29,12 +29,3 @@ class Tests {
                 `is`("<html><body><center>Hello</center></body></html>"))
     }
 }
-
-class HtmlTag(val tag: String, val inner: String) {
-    fun src(): String {
-        return "<%1\$s>%2\$s</%1\$s>".format(tag, inner)
-    }
-
-    constructor(tag: String) : this(tag, "")
-    constructor(tag: String, inner: HtmlTag) : this(tag, inner.src())
-}

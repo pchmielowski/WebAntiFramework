@@ -16,6 +16,11 @@ fun main(args: Array<String>) {
             "/goodbye" to TextPage(
                     "Good bye! Be back on %s!",
                     Param("back")
+            ),
+            "/html" to HtmlPage(
+                    HtmlTag("html",
+                            HtmlTag("body",
+                                    HtmlTag("center", "Hello")))
             )).start(8080)
 }
 
@@ -49,7 +54,7 @@ fun param(url: String, name: String): String {
 }
 
 fun endpoint(url: String): String {
-    val value = ("GET\\s([^?]*)?.*").toRegex()
+    val value = ("GET\\s([^?^\\s]*)?.*").toRegex()
             .matchEntire(url)?.groups?.get(1)?.value ?: return ""
     return value
 }
@@ -87,6 +92,27 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
     }
 
 }
+
+
+class HtmlPage(val html: HtmlTag) : Response {
+    override fun answer(request: Request, socket: Socket) {
+        socket.outputStream.write(
+                ("HTTP/1.1 200 OK\r\n\r\n" +
+                        html.src()).toByteArray())
+    }
+
+}
+
+
+class HtmlTag(val tag: String, val inner: String) {
+    fun src(): String {
+        return "<%1\$s>%2\$s</%1\$s>".format(tag, inner)
+    }
+
+    constructor(tag: String) : this(tag, "")
+    constructor(tag: String, inner: HtmlTag) : this(tag, inner.src())
+}
+
 
 interface Response {
 

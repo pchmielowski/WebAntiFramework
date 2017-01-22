@@ -41,17 +41,17 @@ class Tests {
 
   @Ignore @Test fun action() {
     Action(
-        Param("user"),
-        { p -> println(p) }, HtmlPage(
-        HtmlTag("html",
-            HtmlTag("body",
-                listOf(
-                    HtmlTag("center", "OK"),
-                    HtmlTag("a", "click")
-                )
+        Param("user") to { p -> println(p) },
+        HtmlPage(
+            HtmlTag("html",
+                HtmlTag("body",
+                    listOf(
+                        HtmlTag("center", "OK"),
+                        HtmlTag("a", "click")
+                    )
 
-            ))
-    )
+                ))
+        )
     ).answer(MockedRequest(), Socket())
   }
 }

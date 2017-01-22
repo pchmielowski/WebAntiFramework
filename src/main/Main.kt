@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
           Param("sur")
       ),
       "/add" to Action(
-          Param("user"), { name -> users.add(name) },
+          Param("user") to { name -> users.add(name) },
           response = HtmlPage(
               HtmlTag("html",
                   HtmlTag("body",

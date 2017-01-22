@@ -87,12 +87,12 @@ class HtmlPage(val html: HtmlTag) : Response {
 
 }
 
-class Action(val param: Param,
-             val function: (String) -> Unit,
-             val response: Response) : Response {
+class Action(
+    val maping: Pair<Param, (String) -> Unit>,
+    val response: Response) : Response {
   override fun answer(request: IRequest, socket: Socket) {
-    val value = param.value(request)
-    function.invoke(value)
+    val value = maping.first.value(request)
+    maping.second.invoke(value)
     response.answer(request, socket)
   }
 

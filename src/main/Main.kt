@@ -10,10 +10,6 @@ fun main(args: Array<String>) {
           Param("name"),
           Param("sur")
       ),
-      "/goodbye" to TextPage(
-          "Good bye! Be back on %s!",
-          Param("back")
-      ),
       "/add" to Action(
           Param("user"), { name -> users.add(name) },
           response = HtmlPage(
@@ -21,7 +17,7 @@ fun main(args: Array<String>) {
                   HtmlTag("body",
                       listOf(
                           HtmlTag("h2", "OK"),
-                          HtmlTag("a", "See all users!", params = "href=list")
+                          HtmlTag("a", params = "href=list", inner = "See all users!")
                       ))))
       ),
       "/list" to HtmlPage(

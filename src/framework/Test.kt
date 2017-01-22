@@ -31,9 +31,8 @@ class Tests {
         `is`("<html><body><center>Hello</center></body></html>"))
     Assert.assertThat(
         HtmlTag("body",
-            listOf(
-                HtmlTag("center", "Hello"),
-                HtmlTag("left", "World"))
+            HtmlTag("center", "Hello"),
+            HtmlTag("left", "World")
         ).src(),
         `is`("<body><center>Hello</center><left>World</left></body>"))
     Assert.assertThat(HtmlTag("a", "link", params = "href='url'").src(), `is`("<a href='url'>link</a>"))
@@ -45,11 +44,8 @@ class Tests {
         HtmlPage(
             HtmlTag("html",
                 HtmlTag("body",
-                    listOf(
-                        HtmlTag("center", "OK"),
-                        HtmlTag("a", "click")
-                    )
-
+                    HtmlTag("center", "OK"),
+                    HtmlTag("a", "click")
                 ))
         )
     ).answer(MockedRequest(), Socket())

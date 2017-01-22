@@ -118,7 +118,7 @@ class HtmlTag private constructor(
       params = params)
 
   constructor(tag: String, inner: HtmlTag) : this(tag, innerGenerator = { inner.src() })
-  constructor(tag: String, inners: List<HtmlTag>) : this(
+  constructor(tag: String, vararg inners: HtmlTag) : this(
       tag,
       innerGenerator = { inners.map(HtmlTag::src).joinToString(separator = "") }
   )

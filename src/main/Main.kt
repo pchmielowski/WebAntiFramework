@@ -15,10 +15,9 @@ fun main(args: Array<String>) {
           response = HtmlPage(
               HtmlTag("html",
                   HtmlTag("body",
-                      listOf(
-                          HtmlTag("h2", "OK"),
-                          HtmlTag("a", params = "href=list", inner = "See all users!")
-                      ))))
+                      HtmlTag("h2", "OK"),
+                      HtmlTag("a", params = "href=list", inner = "See all users!")
+                  )))
       ),
       "/list" to HtmlPage(
           HtmlTag("html",

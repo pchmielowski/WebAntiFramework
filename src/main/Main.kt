@@ -7,7 +7,7 @@ import java.net.ServerSocket
 import java.net.Socket
 
 fun main(args: Array<String>) {
-    val users = mutableListOf("Default", "Second")
+    val users = mutableListOf<String>()
     Application(
             "/hello" to TextPage(
                     "Hello, %s %s!",
@@ -21,19 +21,25 @@ fun main(args: Array<String>) {
             "/html" to HtmlPage(
                     HtmlTag("html",
                             HtmlTag("body",
-                                    HtmlTag("center", { "Hello" })))
+                                    HtmlTag("center", "Hello")))
             ),
             "/add" to Action(
                     Param("user"),
-                    { name -> users.add(name) }
+                    { name -> users.add(name) },
+                    HtmlPage(
+                            HtmlTag("html",
+                                    HtmlTag("body",
+                                            listOf(
+                                                    HtmlTag("center", "OK"),
+                                                    HtmlTag("a", "click")
+                                            ))))
             ),
             "/list" to HtmlPage(
                     HtmlTag("html",
                             HtmlTag("body",
                                     HtmlTag("ol",
                                             {
-                                                users.map { HtmlTag("li", { it }).src() }
-                                                        .joinToString("")
+                                                users.map { HtmlTag("li", it) }
                                             })))
             )).start(8080)
 }
@@ -122,33 +128,42 @@ class HtmlPage(val html: HtmlTag) : Response {
 }
 
 
-class Action(val param: Param, val function: (String) -> Unit) : Response {
+class Action(val param: Param,
+             val function: (String) -> Unit,
+             val response: Response) : Response {
     override fun answer(request: IRequest, socket: Socket) {
         val value = param.value(request)
         function.invoke(value)
-        socket.outputStream.write(
-                ("HTTP/1.1 200 OK\r\n\r\n" +
-                        "<b>OK</b>").toByteArray())
+        response.answer(request, socket)
     }
 
 }
 
 
-class HtmlTag(
+class HtmlTag private constructor(
         val tag: String,
-        val innerGenerator: () -> String) {
+        val innerGenerator: () -> String,
+        i: Int = 0 // Dirty trick to distinct two function taking ctors
+) {
     fun src(): String {
         return "<%1\$s>%2\$s</%1\$s>".format(
                 tag,
                 innerGenerator())
     }
 
-    constructor(tag: String) : this(tag, { "" })
-    constructor(tag: String, inner: HtmlTag) : this(tag, { inner.src() })
+    constructor(tag: String) : this(tag, innerGenerator = { "" })
+    constructor(tag: String, inner: String) : this(tag, innerGenerator = { inner })
+    constructor(tag: String, inner: HtmlTag) : this(tag, innerGenerator = { inner.src() })
     constructor(tag: String, inners: List<HtmlTag>) : this(
             tag,
-            { inners.map(HtmlTag::src).joinToString(separator = "") }
+            innerGenerator = { inners.map(HtmlTag::src).joinToString(separator = "") }
     )
+
+    constructor(tag: String, f: () -> List<HtmlTag>) : this(
+            tag,
+            innerGenerator = { f().map { it.src() }.joinToString("") }
+    )
+
 }
 
 

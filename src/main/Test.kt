@@ -25,14 +25,14 @@ class Tests {
         Assert.assertThat(
                 HtmlTag("html",
                         HtmlTag("body",
-                                HtmlTag("center", { "Hello" }))
+                                HtmlTag("center", "Hello"))
                 ).src(),
                 `is`("<html><body><center>Hello</center></body></html>"))
         Assert.assertThat(
                 HtmlTag("body",
                         listOf(
-                                HtmlTag("center", { "Hello" }),
-                                HtmlTag("left", { "World" }))
+                                HtmlTag("center", "Hello"),
+                                HtmlTag("left", "World"))
                 ).src(),
                 `is`("<body><center>Hello</center><left>World</left></body>"))
 
@@ -41,7 +41,16 @@ class Tests {
     @Test fun action() {
         Action(
                 Param("user"),
-                { p -> println(p) }
+                { p -> println(p) }, HtmlPage(
+                HtmlTag("html",
+                        HtmlTag("body",
+                                listOf(
+                                        HtmlTag("center", "OK"),
+                                        HtmlTag("a", "click")
+                                )
+
+                        ))
+        )
         ).answer(MockedRequest(), Socket())
     }
 }

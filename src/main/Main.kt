@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
                                     HtmlTag("body",
                                             listOf(
                                                     HtmlTag("center", "OK"),
-                                                    HtmlTag("a", "click")
+                                                    HtmlTag("a", "click", params = "href=list")
                                             ))))
             ),
             "/list" to HtmlPage(
@@ -143,16 +143,22 @@ class Action(val param: Param,
 class HtmlTag private constructor(
         val tag: String,
         val innerGenerator: () -> String,
+        val params: String = "",
         i: Int = 0 // Dirty trick to distinct two function taking ctors
 ) {
     fun src(): String {
-        return "<%1\$s>%2\$s</%1\$s>".format(
+        return "<%1\$s%3\$s>%2\$s</%1\$s>".format(
                 tag,
-                innerGenerator())
+                innerGenerator(),
+                if (params == "") "" else " " + params)
     }
 
     constructor(tag: String) : this(tag, innerGenerator = { "" })
-    constructor(tag: String, inner: String) : this(tag, innerGenerator = { inner })
+    constructor(tag: String, inner: String, params: String = "") : this(
+            tag,
+            innerGenerator = { inner },
+            params = params)
+
     constructor(tag: String, inner: HtmlTag) : this(tag, innerGenerator = { inner.src() })
     constructor(tag: String, inners: List<HtmlTag>) : this(
             tag,
@@ -163,6 +169,7 @@ class HtmlTag private constructor(
             tag,
             innerGenerator = { f().map { it.src() }.joinToString("") }
     )
+
 
 }
 

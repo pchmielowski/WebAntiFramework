@@ -2,6 +2,7 @@ package main
 
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import java.net.Socket
 
@@ -35,10 +36,10 @@ class Tests {
                                 HtmlTag("left", "World"))
                 ).src(),
                 `is`("<body><center>Hello</center><left>World</left></body>"))
-
+        Assert.assertThat(HtmlTag("a", "link", params = "href='url'").src(), `is`("<a href='url'>link</a>"))
     }
 
-    @Test fun action() {
+    @Ignore @Test fun action() {
         Action(
                 Param("user"),
                 { p -> println(p) }, HtmlPage(

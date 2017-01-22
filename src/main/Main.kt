@@ -21,6 +21,15 @@ fun main(args: Array<String>) {
                     HtmlTag("html",
                             HtmlTag("body",
                                     HtmlTag("center", "Hello")))
+            ),
+            "/list" to HtmlPage(
+                    HtmlTag("html",
+                            HtmlTag("body",
+                                    HtmlTag("ol", listOf(
+                                            HtmlTag("li", "first"),
+                                            HtmlTag("li", "second"),
+                                            HtmlTag("li", "third")
+                                    ))))
             )).start(8080)
 }
 
@@ -111,6 +120,10 @@ class HtmlTag(val tag: String, val inner: String) {
 
     constructor(tag: String) : this(tag, "")
     constructor(tag: String, inner: HtmlTag) : this(tag, inner.src())
+    constructor(tag: String, inners: List<HtmlTag>) : this(
+            tag,
+            inners.map { i -> i.src() }.joinToString(separator = "")
+    )
 }
 
 

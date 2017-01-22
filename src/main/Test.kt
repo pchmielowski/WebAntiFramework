@@ -27,5 +27,13 @@ class Tests {
                                 HtmlTag("center", "Hello"))
                 ).src(),
                 `is`("<html><body><center>Hello</center></body></html>"))
+        Assert.assertThat(
+                HtmlTag("body",
+                        listOf(
+                                HtmlTag("center", "Hello"),
+                                HtmlTag("left", "World"))
+                ).src(),
+                `is`("<body><center>Hello</center><left>World</left></body>"))
+
     }
 }

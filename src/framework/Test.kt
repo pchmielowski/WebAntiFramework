@@ -1,4 +1,4 @@
-package main
+package framework
 
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert

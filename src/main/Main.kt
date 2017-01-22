@@ -8,21 +8,15 @@ import java.net.Socket
 
 fun main(args: Array<String>) {
     Application(
-            EndPoint(
-                    location = "/hello",
-                    response = TextPage(
-                            "Hello, %s %s!",
-                            Param("name"),
-                            Param("sur")
-                    )),
-            EndPoint(
-                    location = "/goodbye",
-                    response = TextPage(
-                            "Good bye! Be back on %s!",
-                            Param("back")
-                    ))
-
-    ).start(8080)
+            "/hello" to TextPage(
+                    "Hello, %s %s!",
+                    Param("name"),
+                    Param("sur")
+            ),
+            "/goodbye" to TextPage(
+                    "Good bye! Be back on %s!",
+                    Param("back")
+            )).start(8080)
 }
 
 class Param(val name: String) {
@@ -31,12 +25,7 @@ class Param(val name: String) {
     }
 }
 
-class EndPoint(val location: String, val response: TextPage) {
-    fun page(): Response = response
-    fun isValid(actualLocation: String) = actualLocation == location
-}
-
-class Application(vararg val endpoints: EndPoint) {
+class Application(vararg val endpoints: Pair<String, Response>) {
     fun start(port: Int) {
         val server = ServerSocket(port)
         while (true) {
@@ -48,9 +37,8 @@ class Application(vararg val endpoints: EndPoint) {
 
     private fun function(socket: Socket) {
         val request = Request(socket.inputStream)
-        endpoints
-                .filter { it.isValid(request.endpoint()) }
-                .forEach { it.page().answer(request, socket) }
+        endpoints.toMap()[request.endpoint()]
+                ?.answer(request, socket)
     }
 }
 
@@ -95,9 +83,7 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
                                     p ->
                                     p.value(request)
                                 }.toTypedArray()
-                        )
-                        )
-                        .toByteArray())
+                        )).toByteArray())
     }
 
 }

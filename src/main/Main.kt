@@ -7,6 +7,7 @@ import java.net.ServerSocket
 import java.net.Socket
 
 fun main(args: Array<String>) {
+    val users = mutableListOf<String>("Default", "Second")
     Application(
             "/hello" to TextPage(
                     "Hello, %s %s!",
@@ -22,19 +23,24 @@ fun main(args: Array<String>) {
                             HtmlTag("body",
                                     HtmlTag("center", "Hello")))
             ),
+            "/add" to Action(
+                    Param("user"),
+                    { name -> users.add(name) }
+            ),
             "/list" to HtmlPage(
                     HtmlTag("html",
                             HtmlTag("body",
-                                    HtmlTag("ol", listOf(
-                                            HtmlTag("li", "first"),
-                                            HtmlTag("li", "second"),
-                                            HtmlTag("li", "third")
-                                    ))))
+                                    HtmlTag("ol",
+                                            {
+                                                println("invoking: ")
+                                                users.forEach(::println)
+                                                users.map { HtmlTag("li", it) }
+                                            })))
             )).start(8080)
 }
 
 class Param(val name: String) {
-    fun value(request: Request): String {
+    fun value(request: IRequest): String {
         return request.param(name)
     }
 }
@@ -69,7 +75,7 @@ fun endpoint(url: String): String {
 }
 
 
-class Request(stream: InputStream) {
+class Request(stream: InputStream) : IRequest {
     val content = ctnt(stream)
 
     private fun ctnt(stream: InputStream): String {
@@ -84,12 +90,16 @@ class Request(stream: InputStream) {
         return lines.joinToString()
     }
 
-    fun param(key: String): String = param(content, key)
+    override fun param(name: String): String = param(content, name)
     fun endpoint(): String = endpoint(content)
 }
 
+interface IRequest {
+    fun param(name: String): String
+}
+
 class TextPage(val msg: String, vararg val param: Param) : Response {
-    override fun answer(request: Request, socket: Socket) {
+    override fun answer(request: IRequest, socket: Socket) {
         socket.outputStream.write(
                 ("HTTP/1.1 200 OK\r\n\r\n" +
                         msg.format(
@@ -104,7 +114,7 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 
 
 class HtmlPage(val html: HtmlTag) : Response {
-    override fun answer(request: Request, socket: Socket) {
+    override fun answer(request: IRequest, socket: Socket) {
         socket.outputStream.write(
                 ("HTTP/1.1 200 OK\r\n\r\n" +
                         html.src()).toByteArray())
@@ -113,21 +123,42 @@ class HtmlPage(val html: HtmlTag) : Response {
 }
 
 
-class HtmlTag(val tag: String, val inner: String) {
+class Action(val param: Param, val function: (String) -> Unit) : Response {
+    override fun answer(request: IRequest, socket: Socket) {
+        val value = param.value(request)
+        println(value)
+        function.invoke(value)
+        socket.outputStream.write(
+                ("HTTP/1.1 200 OK\r\n\r\n" +
+                        "<b>OK</b>").toByteArray())
+    }
+
+}
+
+
+class HtmlTag(
+        val tag: String,
+        val inner: String,
+        val function: () -> List<HtmlTag> = { listOf<HtmlTag>() }) {
     fun src(): String {
-        return "<%1\$s>%2\$s</%1\$s>".format(tag, inner)
+        println("will be invoked")
+        return "<%1\$s>%2\$s</%1\$s>".format(
+                tag,
+                inner + function().map(HtmlTag::src).joinToString(""))
     }
 
     constructor(tag: String) : this(tag, "")
     constructor(tag: String, inner: HtmlTag) : this(tag, inner.src())
     constructor(tag: String, inners: List<HtmlTag>) : this(
             tag,
-            inners.map { i -> i.src() }.joinToString(separator = "")
+            inners.map(HtmlTag::src).joinToString(separator = "")
     )
+
+    constructor(tag: String, function: () -> List<HtmlTag>) : this(tag, "", function)
 }
 
 
 interface Response {
 
-    fun answer(request: Request, socket: Socket)
+    fun answer(request: IRequest, socket: Socket)
 }

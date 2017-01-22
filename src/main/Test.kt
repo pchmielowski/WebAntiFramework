@@ -3,6 +3,8 @@ package main
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert
 import org.junit.Test
+import java.io.InputStream
+import java.net.Socket
 
 class Tests {
     @Test fun endpoint_test() {
@@ -36,4 +38,17 @@ class Tests {
                 `is`("<body><center>Hello</center><left>World</left></body>"))
 
     }
+
+    @Test fun action() {
+        Action(
+                Param("user"),
+                { p -> println(p) }
+        ).answer(MockedRequest(), Socket())
+    }
 }
+
+class MockedRequest : IRequest {
+    override fun param(name: String): String = "Piotrek"
+
+}
+

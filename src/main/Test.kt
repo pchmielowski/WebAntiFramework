@@ -3,7 +3,6 @@ package main
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert
 import org.junit.Test
-import java.io.InputStream
 import java.net.Socket
 
 class Tests {
@@ -26,14 +25,14 @@ class Tests {
         Assert.assertThat(
                 HtmlTag("html",
                         HtmlTag("body",
-                                HtmlTag("center", "Hello"))
+                                HtmlTag("center", { "Hello" }))
                 ).src(),
                 `is`("<html><body><center>Hello</center></body></html>"))
         Assert.assertThat(
                 HtmlTag("body",
                         listOf(
-                                HtmlTag("center", "Hello"),
-                                HtmlTag("left", "World"))
+                                HtmlTag("center", { "Hello" }),
+                                HtmlTag("left", { "World" }))
                 ).src(),
                 `is`("<body><center>Hello</center><left>World</left></body>"))
 

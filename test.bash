@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function assert {
+innerGenerator assert {
   curl "$1" 2>/dev/null | grep "$2"; echo $?
 }
 

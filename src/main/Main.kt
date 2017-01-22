@@ -7,7 +7,7 @@ import java.net.ServerSocket
 import java.net.Socket
 
 fun main(args: Array<String>) {
-    val users = mutableListOf<String>("Default", "Second")
+    val users = mutableListOf("Default", "Second")
     Application(
             "/hello" to TextPage(
                     "Hello, %s %s!",
@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
             "/html" to HtmlPage(
                     HtmlTag("html",
                             HtmlTag("body",
-                                    HtmlTag("center", "Hello")))
+                                    HtmlTag("center", { "Hello" })))
             ),
             "/add" to Action(
                     Param("user"),
@@ -32,9 +32,8 @@ fun main(args: Array<String>) {
                             HtmlTag("body",
                                     HtmlTag("ol",
                                             {
-                                                println("invoking: ")
-                                                users.forEach(::println)
-                                                users.map { HtmlTag("li", it) }
+                                                users.map { HtmlTag("li", { it }).src() }
+                                                        .joinToString("")
                                             })))
             )).start(8080)
 }
@@ -126,7 +125,6 @@ class HtmlPage(val html: HtmlTag) : Response {
 class Action(val param: Param, val function: (String) -> Unit) : Response {
     override fun answer(request: IRequest, socket: Socket) {
         val value = param.value(request)
-        println(value)
         function.invoke(value)
         socket.outputStream.write(
                 ("HTTP/1.1 200 OK\r\n\r\n" +
@@ -138,23 +136,19 @@ class Action(val param: Param, val function: (String) -> Unit) : Response {
 
 class HtmlTag(
         val tag: String,
-        val inner: String,
-        val function: () -> List<HtmlTag> = { listOf<HtmlTag>() }) {
+        val innerGenerator: () -> String) {
     fun src(): String {
-        println("will be invoked")
         return "<%1\$s>%2\$s</%1\$s>".format(
                 tag,
-                inner + function().map(HtmlTag::src).joinToString(""))
+                innerGenerator())
     }
 
-    constructor(tag: String) : this(tag, "")
-    constructor(tag: String, inner: HtmlTag) : this(tag, inner.src())
+    constructor(tag: String) : this(tag, { "" })
+    constructor(tag: String, inner: HtmlTag) : this(tag, { inner.src() })
     constructor(tag: String, inners: List<HtmlTag>) : this(
             tag,
-            inners.map(HtmlTag::src).joinToString(separator = "")
+            { inners.map(HtmlTag::src).joinToString(separator = "") }
     )
-
-    constructor(tag: String, function: () -> List<HtmlTag>) : this(tag, "", function)
 }
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function assert {
-  curl '$1' 2>/dev/null | grep '$2'; echo $?
+  curl "$1" 2>/dev/null | grep "$2"; echo $?
 }
 
 assert 'localhost:8080/hello?name=Piotrek&sur=chmielowski' 'Hello, Piotrek chmielowski!'

@@ -18,20 +18,14 @@ fun main(args: Array<String>) {
           "Good bye! Be back on %s!",
           Param("back")
       ),
-      "/html" to HtmlPage(
-          HtmlTag("html",
-              HtmlTag("body",
-                  HtmlTag("center", "Hello")))
-      ),
       "/add" to Action(
-          Param("user"),
-          { name -> users.add(name) },
-          HtmlPage(
+          Param("user"), { name -> users.add(name) },
+          response = HtmlPage(
               HtmlTag("html",
                   HtmlTag("body",
                       listOf(
-                          HtmlTag("center", "OK"),
-                          HtmlTag("a", "click", params = "href=list")
+                          HtmlTag("h2", "OK"),
+                          HtmlTag("a", "See all users!", params = "href=list")
                       ))))
       ),
       "/list" to HtmlPage(

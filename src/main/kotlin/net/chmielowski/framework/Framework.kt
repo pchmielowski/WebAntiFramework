@@ -1,4 +1,4 @@
-package framework
+package net.chmielowski.framework
 
 import java.io.BufferedReader
 import java.io.InputStream

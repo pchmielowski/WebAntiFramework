@@ -1,6 +1,10 @@
-package main
+package net.chmielowski.webapp
 
-import framework.*
+import net.chmielowski.framework.Action
+import net.chmielowski.framework.HtmlPage
+import net.chmielowski.framework.HtmlTag
+import net.chmielowski.framework.Param
+import net.chmielowski.framework.Application
 
 fun main(args: Array<String>) {
   val users = mutableListOf<String>()
@@ -29,7 +33,7 @@ fun main(args: Array<String>) {
               HtmlTag("a", params = "href=/", inner = "Back")
           ))
   )
-  
+
   Application(
       "/" to mainPage,
       "/add" to add

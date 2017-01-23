@@ -1,4 +1,4 @@
-package framework
+package net.chmielowski.framework
 
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert

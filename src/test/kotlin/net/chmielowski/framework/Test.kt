@@ -20,32 +20,32 @@ class Tests {
   }
 
   @Test fun html() {
-    Assert.assertThat(HtmlTag("inner").src(), `is`("<inner></inner>"))
-    Assert.assertThat(HtmlTag("inner").src(), `is`("<inner></inner>"))
-    Assert.assertThat(HtmlTag("inner", HtmlTag("inner")).src(), `is`("<inner><inner></inner></inner>"))
+    Assert.assertThat(BasicHtml("inner").src(), `is`("<inner></inner>"))
+    Assert.assertThat(BasicHtml("inner").src(), `is`("<inner></inner>"))
+    Assert.assertThat(BasicHtml("inner", BasicHtml("inner")).src(), `is`("<inner><inner></inner></inner>"))
     Assert.assertThat(
-        HtmlTag("inner",
-            HtmlTag("inner",
-                HtmlTag("center", "Hello"))
+        BasicHtml("inner",
+            BasicHtml("inner",
+                BasicHtml("center", "Hello"))
         ).src(),
         `is`("<inner><inner><center>Hello</center></inner></inner>"))
     Assert.assertThat(
-        HtmlTag("inner", "",
-            HtmlTag("center", "Hello"),
-            HtmlTag("left", "World")
+        BasicHtml("inner", "",
+            BasicHtml("center", "Hello"),
+            BasicHtml("left", "World")
         ).src(),
         `is`("<inner><center>Hello</center><left>World</left></inner>"))
-    Assert.assertThat(HtmlTag("a", "link", params = "href='url'").src(), `is`("<a href='url'>link</a>"))
+    Assert.assertThat(BasicHtml("a", "link", params = "href='url'").src(), `is`("<a href='url'>link</a>"))
   }
 
   @Ignore @Test fun action() {
     Action(
         Param("user") to { p -> println(p) },
-        HtmlPage(
-            HtmlTag("inner",
-                HtmlTag("inner", "",
-                    HtmlTag("center", "OK"),
-                    HtmlTag("a", "click")
+        HtmlResponse(
+            BasicHtml("inner",
+                BasicHtml("inner", "",
+                    BasicHtml("center", "OK"),
+                    BasicHtml("a", "click")
                 ))
         )
     ).answer(MockedRequest(), Socket())

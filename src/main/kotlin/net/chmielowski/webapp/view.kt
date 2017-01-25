@@ -1,32 +1,32 @@
 package net.chmielowski.webapp
 
 import net.chmielowski.framework.*
-import net.chmielowski.webapp.User
+import net.chmielowski.webapp.UserHtml
 import java.net.Socket
 
-class MainPage(val showUsersFunction: () -> List<User>) : Tag {
-  override fun src() = HtmlTag("body",
+class MainPageHtml(val showUsersFunction: () -> List<UserHtml>) : Html {
+  override fun src() = BasicHtml("body",
       "bgcolor=gray",
-      HtmlTag("h1", "Users:"),
-      HtmlTag("ol", showUsersFunction),
-      HtmlTag("form",
+      BasicHtml("h1", "Users:"),
+      BasicHtml("ol", showUsersFunction),
+      BasicHtml("form",
           "action=add method=get",
-          HtmlTag("input", params = "name=user"),
-          HtmlTag("input", params = "type=submit value=Add")
+          BasicHtml("input", params = "name=user"),
+          BasicHtml("input", params = "type=submit value=Add")
       )
   ).src()
 }
 
-class User(val name: String) : Tag {
-  override fun src() = HtmlTag("li", name).src()
+class UserHtml(val name: String) : Html {
+  override fun src() = BasicHtml("li", name).src()
 }
 
-class AddedOKPage : Tag {
+class AddedPageHtml : Html {
   override fun src(): String {
-    return HtmlTag("body",
+    return BasicHtml("body",
         "bgcolor=gray",
-        HtmlTag("h1", "OK"),
-        HtmlTag("a", params = "href=/", inner = "Back")
+        BasicHtml("h1", "OK"),
+        BasicHtml("a", params = "href=/", inner = "Back")
     ).src()
   }
 }

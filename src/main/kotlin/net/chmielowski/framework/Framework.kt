@@ -78,7 +78,7 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 
 }
 
-class HtmlPage(val inner: Tag) : Response {
+class HtmlResponse(val inner: Html) : Response {
   override fun answer(request: IRequest, socket: Socket) {
     socket.outputStream.write(
         ("HTTP/1.1 200 OK\r\n\r\n" +
@@ -98,12 +98,12 @@ class Action(
 
 }
 
-class HtmlTag private constructor(
+class BasicHtml private constructor(
     val tag: String,
     val innerGenerator: () -> String,
     val params: String = "",
     i: Int = 0 // Dirty trick to distinct two function taking ctors
-) : Tag {
+) : Html {
   override fun src(): String {
     return "<%1\$s%3\$s>%2\$s</%1\$s>".format(
         tag,
@@ -117,14 +117,14 @@ class HtmlTag private constructor(
       innerGenerator = { inner },
       params = params)
 
-  constructor(tag: String, inner: Tag) : this(tag, innerGenerator = { inner.src() })
-  constructor(tag: String, params: String = "", vararg inners: HtmlTag) : this(
+  constructor(tag: String, inner: Html) : this(tag, innerGenerator = { inner.src() })
+  constructor(tag: String, params: String = "", vararg inners: BasicHtml) : this(
       tag,
-      innerGenerator = { inners.map(Tag::src).joinToString(separator = "") },
+      innerGenerator = { inners.map(Html::src).joinToString(separator = "") },
       params = params
   )
 
-  constructor(tag: String, f: () -> List<Tag>) : this(
+  constructor(tag: String, f: () -> List<Html>) : this(
       tag,
       innerGenerator = { f().map { it.src() }.joinToString("") }
   )
@@ -132,7 +132,7 @@ class HtmlTag private constructor(
 
 }
 
-interface Tag {
+interface Html {
   fun src(): String
 
 }

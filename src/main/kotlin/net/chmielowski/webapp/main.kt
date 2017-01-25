@@ -8,12 +8,12 @@ import net.chmielowski.framework.*
 fun main(args: Array<String>) {
   val users = Users()
   Application(
-      "/" to HtmlPage(
-          MainPage({
-            users.all.map(::User)
+      "/" to HtmlResponse(
+          MainPageHtml({
+            users.all.map(::UserHtml)
           })),
       "/add" to Action(
           Param("user") to { name -> users.add(name) },
-          response = HtmlPage(AddedOKPage())))
+          response = HtmlResponse(AddedPageHtml())))
       .start(8080)
 }

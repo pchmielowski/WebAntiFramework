@@ -25,7 +25,12 @@ class Application(vararg val endpoints: Pair<String, Response>) {
   private fun function(socket: Socket) {
     val request = Request(socket.inputStream)
     endpoints.toMap()
-        .getOrElse(request.endpoint()) { TextPage("404 :(") }
+        .getOrElse(request.endpoint()) {
+          HtmlResponse(BasicHtml("body",
+              "bgcolor=gray",
+              BasicHtml("h1", ":(")
+          ), "404")
+        }
         .answer(request, socket)
   }
 }
@@ -79,12 +84,14 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 
 }
 
-class HtmlResponse(val inner: Html) : Response {
+class HtmlResponse(val inner: Html, val code: String) : Response {
   override fun answer(request: IRequest, socket: Socket) {
     socket.outputStream.write(
-        ("HTTP/1.1 200 OK\r\n\r\n" +
+        ("HTTP/1.1 " + code + "\r\n\r\n " +
             "<html>" + inner.src() + "</html>").toByteArray())
   }
+
+  constructor(inner: Html) : this(inner, "200 OK")
 
 }
 

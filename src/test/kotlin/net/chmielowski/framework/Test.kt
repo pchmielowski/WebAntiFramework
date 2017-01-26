@@ -46,8 +46,7 @@ class Tests {
                 BasicHtml("inner", "",
                     BasicHtml("center", "OK"),
                     BasicHtml("a", "click")
-                ))
-        )
+                )))
     ).answer(MockedRequest(), Socket())
   }
 }

@@ -106,36 +106,51 @@ class Action(
 
 class BasicHtml private constructor(
     val tag: String,
-    val innerGenerator: () -> String,
-    val params: String = "",
-    i: Int = 0 // Dirty trick to distinct two function taking ctors
+    val printInner: () -> String,
+    val params: String = ""
 ) : Html {
   override fun src(): String {
     return "<%1\$s%3\$s>%2\$s</%1\$s>".format(
         tag,
-        innerGenerator(),
-        if (params == "") "" else " " + params)
+        printInner(),
+        params.html())
   }
 
-  constructor(tag: String) : this(tag, innerGenerator = { "" })
+  constructor(tag: String) : this(
+      tag = tag,
+      printInner = { "" })
+
+  constructor(tag: String, inner: Html) : this(
+      tag = tag,
+      printInner = { inner.src() })
+
+  constructor(tag: String, inner: () -> List<Html>) : this(
+      tag = tag,
+      printInner = {
+        inner()
+            .map { it.src() }
+            .joinToString("")
+      })
+
   constructor(tag: String, inner: String, params: String = "") : this(
-      tag,
-      innerGenerator = { inner },
+      tag = tag,
+      printInner = { inner },
       params = params)
 
-  constructor(tag: String, inner: Html) : this(tag, innerGenerator = { inner.src() })
   constructor(tag: String, params: String = "", vararg inners: BasicHtml) : this(
-      tag,
-      innerGenerator = { inners.map(Html::src).joinToString(separator = "") },
-      params = params
-  )
+      tag = tag,
+      printInner = {
+        inners
+            .map(Html::src)
+            .joinToString(separator = "")
+      },
+      params = params)
+}
 
-  constructor(tag: String, f: () -> List<Html>) : this(
-      tag,
-      innerGenerator = { f().map { it.src() }.joinToString("") }
-  )
-
-
+private fun String.html() = if (this == "") {
+  this
+} else {
+  " %s".format(this)
 }
 
 interface Html {

@@ -5,9 +5,7 @@ class BasicHtml private constructor(
     val printInner: () -> String,
     val params: String = ""
 ) : Html {
-  override fun src(): String {
-    return "<$tag${params.html()}>${printInner()}</$tag>"
-  }
+  override fun src() = "<$tag${params.html()}>${printInner()}</$tag>"
 
   constructor(tag: String) : this(
       tag = tag,

@@ -85,14 +85,12 @@ class TextPage(val msg: String, vararg val param: Param) : Response {
 }
 
 class HtmlResponse(val inner: Html, val code: String) : Response {
-  override fun answer(request: IRequest, socket: Socket) {
-    socket.outputStream.write(
-        ("HTTP/1.1 " + code + "\r\n\r\n " +
-            "<html>" + inner.src() + "</html>").toByteArray())
-  }
+  override fun answer(request: IRequest, socket: Socket) = socket.outputStream.write(
+      "HTTP/1.1 %s\r\n\r\n <html>%s</html>"
+          .format(code, inner.src())
+          .toByteArray())
 
   constructor(inner: Html) : this(inner, "200 OK")
-
 }
 
 class Action(

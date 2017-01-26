@@ -24,8 +24,9 @@ class Application(vararg val endpoints: Pair<String, Response>) {
 
   private fun function(socket: Socket) {
     val request = Request(socket.inputStream)
-    endpoints.toMap()[request.endpoint()]
-        ?.answer(request, socket)
+    endpoints.toMap()
+        .getOrElse(request.endpoint()) { TextPage("404 :(") }
+        .answer(request, socket)
   }
 }
 

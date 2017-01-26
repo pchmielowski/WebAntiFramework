@@ -6,11 +6,11 @@ import net.chmielowski.framework.view.Html
 import net.chmielowski.webapp.UserHtml
 import java.net.Socket
 
-class MainPageHtml(val showUsersFunction: () -> List<UserHtml>) : Html {
+class MainPageHtml(val showUsersFunction: () -> List<Html>) : Html {
   override fun src() = BasicHtml("body",
       "bgcolor=gray",
       BasicHtml("h1", "Users:"),
-      BasicHtml("ol", showUsersFunction),
+      BasicHtml("ol", inner = showUsersFunction),
       BasicHtml("form",
           "action=add method=get",
           BasicHtml("input", params = "name=user"),

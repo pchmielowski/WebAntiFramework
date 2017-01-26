@@ -6,10 +6,7 @@ class BasicHtml private constructor(
     val params: String = ""
 ) : Html {
   override fun src(): String {
-    return "<%1\$s%3\$s>%2\$s</%1\$s>".format(
-        tag,
-        printInner(),
-        params.html())
+    return "<$tag${params.html()}>${printInner()}</$tag>"
   }
 
   constructor(tag: String) : this(

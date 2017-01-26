@@ -1,7 +1,5 @@
 package net.chmielowski.framework.view
 
-import net.chmielowski.framework.view.Html
-
 class BasicHtml private constructor(
     val tag: String,
     val printInner: () -> String,
@@ -22,12 +20,13 @@ class BasicHtml private constructor(
       tag = tag,
       printInner = { inner.src() })
 
-  constructor(tag: String, inner: () -> List<Html>) : this(
+  constructor(tag: String, params: String = "", inner: () -> List<Html>) : this(
       tag = tag,
+      params = params,
       printInner = {
         inner()
             .map(Html::src)
-            .joinToString("")
+            .joinToString(separator = "")
       })
 
   constructor(tag: String, inner: String, params: String = "") : this(
@@ -35,14 +34,10 @@ class BasicHtml private constructor(
       printInner = { inner },
       params = params)
 
-  constructor(tag: String, params: String = "", vararg inners: BasicHtml) : this(
+  constructor(tag: String, params: String = "", vararg inners: Html) : this(
       tag = tag,
-      printInner = {
-        inners
-            .map(Html::src)
-            .joinToString(separator = "")
-      },
-      params = params)
+      params = params,
+      inner = { inners.asList() })
 }
 
 private fun String.html() = if (this == "") {

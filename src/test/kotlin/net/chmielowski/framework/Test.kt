@@ -23,10 +23,12 @@ class Tests {
   @Test fun html() {
     Assert.assertThat(BasicHtml("inner").src(), `is`("<inner></inner>"))
     Assert.assertThat(BasicHtml("inner").src(), `is`("<inner></inner>"))
-    Assert.assertThat(BasicHtml("inner", BasicHtml("inner")).src(), `is`("<inner><inner></inner></inner>"))
+    Assert.assertThat(BasicHtml("inner", "", BasicHtml("inner")).src(), `is`("<inner><inner></inner></inner>"))
     Assert.assertThat(
         BasicHtml("inner",
+            "",
             BasicHtml("inner",
+                "",
                 BasicHtml("center", "Hello"))
         ).src(),
         `is`("<inner><inner><center>Hello</center></inner></inner>"))
@@ -44,6 +46,7 @@ class Tests {
         Param("user") to { p -> println(p) },
         HtmlResponse(
             BasicHtml("inner",
+                "",
                 BasicHtml("inner", "",
                     BasicHtml("center", "OK"),
                     BasicHtml("a", "click")

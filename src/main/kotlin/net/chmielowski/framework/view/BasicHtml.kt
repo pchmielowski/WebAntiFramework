@@ -11,10 +11,6 @@ class BasicHtml private constructor(
       tag = tag,
       printInner = { "" })
 
-  constructor(tag: String, inner: Html) : this(
-      tag = tag,
-      printInner = { inner.src() })
-
   constructor(tag: String, params: String = "", inner: () -> List<Html>) : this(
       tag = tag,
       params = params,

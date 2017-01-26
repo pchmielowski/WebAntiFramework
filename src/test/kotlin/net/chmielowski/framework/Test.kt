@@ -1,5 +1,6 @@
 package net.chmielowski.framework
 
+import net.chmielowski.framework.view.BasicHtml
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Assert
 import org.junit.Ignore

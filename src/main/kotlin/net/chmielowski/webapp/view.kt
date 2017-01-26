@@ -1,6 +1,8 @@
 package net.chmielowski.webapp
 
 import net.chmielowski.framework.*
+import net.chmielowski.framework.view.BasicHtml
+import net.chmielowski.framework.view.Html
 import net.chmielowski.webapp.UserHtml
 import java.net.Socket
 
